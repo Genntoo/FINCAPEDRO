@@ -1,0 +1,413 @@
+{% extends "base_mobile.html" %}
+
+{% block title %}Dashboard - Finca Rústica{% endblock %}
+
+{% block content %}
+<!-- Header del dashboard -->
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h1 class="h3 mb-0">Dashboard</h1>
+        <p class="text-muted small mb-0">Bienvenido, {{ current_user.username }}</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-success btn-sm" onclick="location.reload()">
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
+        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#nuevaReservaModal">
+            <i class="bi bi-plus-lg"></i> Añadir Reserva
+        </button>
+    </div>
+</div>
+
+<!-- Cards de estadísticas -->
+<div class="row g-3 mb-4">
+    <div class="col-6">
+        <div class="card dashboard-card text-white bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="card-title mb-2">Reservas</h6>
+                        <h2 id="reservas-mes" class="mb-0">0</h2>
+                        <small class="opacity-75">Este mes</small>
+                    </div>
+                    <i class="bi bi-calendar-check" style="font-size: 2rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card dashboard-card text-white bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="card-title mb-2">Ingresos</h6>
+                        <h2 id="ingresos-mes" class="mb-0">0€</h2>
+                        <small class="opacity-75">Este mes</small>
+                    </div>
+                    <i class="bi bi-cash-coin" style="font-size: 2rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card dashboard-card text-white bg-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="card-title mb-2">Mensajes</h6>
+                        <h2 id="mensajes-enviados" class="mb-0">0</h2>
+                        <small class="opacity-75">Enviados</small>
+                    </div>
+                    <i class="bi bi-whatsapp" style="font-size: 2rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card dashboard-card text-white bg-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="card-title mb-2">Próxima</h6>
+                        <h6 id="proxima-reserva" class="mb-0">-</h6>
+                        <small class="opacity-75">Reserva</small>
+                    </div>
+                    <i class="bi bi-calendar-event" style="font-size: 2rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Accesos rápidos -->
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="bi bi-lightning-charge"></i> Accesos Rápidos</h5>
+    </div>
+    <div class="card-body p-2">
+        <div class="row g-2">
+            <div class="col-4">
+                <a href="{{ url_for('calendario') }}" class="btn btn-outline-primary w-100 d-flex flex-column align-items-center py-3">
+                    <i class="bi bi-calendar" style="font-size: 1.8rem;"></i>
+                    <span class="mt-2 small">Calendario</span>
+                </a>
+            </div>
+            <div class="col-4">
+                <button class="btn btn-outline-success w-100 d-flex flex-column align-items-center py-3" 
+                        data-bs-toggle="modal" data-bs-target="#nuevaReservaModal">
+                    <i class="bi bi-plus-circle" style="font-size: 1.8rem;"></i>
+                    <span class="mt-2 small">Nueva</span>
+                </button>
+            </div>
+            <div class="col-4">
+                <a href="{{ url_for('mensajes') }}" class="btn btn-outline-warning w-100 d-flex flex-column align-items-center py-3">
+                    <i class="bi bi-whatsapp" style="font-size: 1.8rem;"></i>
+                    <span class="mt-2 small">Mensajes</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Próximas reservas -->
+<div class="card mb-4">
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="bi bi-calendar-week"></i> Próximas Reservas</h5>
+        <a href="{{ url_for('reservas') }}" class="btn btn-sm btn-light">Ver todas</a>
+    </div>
+    <div class="card-body p-0">
+        <div class="list-group list-group-flush" id="proximas-reservas-list">
+            <div class="list-group-item text-center text-muted py-4">
+                <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mb-0 mt-2">Cargando reservas...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gráfico de estadísticas (versión compacta) -->
+<div class="card mb-4 d-none d-md-block">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Tipos de Eventos</h5>
+    </div>
+    <div class="card-body">
+        <canvas id="tiposCelebracionChart" style="max-height: 250px;"></canvas>
+    </div>
+</div>
+
+<!-- Modal Nueva Reserva (versión móvil) -->
+<div class="modal fade" id="nuevaReservaModal" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Nueva Reserva</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="nuevaReservaForm">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del Cliente *</label>
+                        <input type="text" class="form-control form-control-lg" name="cliente_nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Teléfono *</label>
+                        <input type="tel" class="form-control form-control-lg" name="cliente_telefono" 
+                               placeholder="+34 600 123 456" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control form-control-lg" name="cliente_email">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha del Evento *</label>
+                        <input type="date" class="form-control form-control-lg" name="fecha_evento" required>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Hora Inicio *</label>
+                            <input type="time" class="form-control form-control-lg" name="hora_inicio" value="12:00" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Hora Fin *</label>
+                            <input type="time" class="form-control form-control-lg" name="hora_fin" value="23:59" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Celebración</label>
+                        <select class="form-select form-select-lg" name="tipo_celebracion">
+                            <option value="">Seleccionar...</option>
+                            <option value="boda">💒 Boda</option>
+                            <option value="cumpleaños">🎂 Cumpleaños</option>
+                            <option value="comunion">✝️ Comunión</option>
+                            <option value="bautizo">👶 Bautizo</option>
+                            <option value="empresa">🏢 Evento Empresa</option>
+                            <option value="otro">🎉 Otro</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Número de Invitados</label>
+                        <input type="number" class="form-control form-control-lg" name="num_invitados" min="0" placeholder="50">
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Precio (€)</label>
+                            <input type="number" class="form-control form-control-lg" name="precio" 
+                                   step="0.01" min="0" placeholder="0.00">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Anticipo (€)</label>
+                            <input type="number" class="form-control form-control-lg" name="anticipo" 
+                                   step="0.01" min="0" value="0" placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Notas</label>
+                        <textarea class="form-control" name="notas" rows="3" 
+                                  placeholder="Observaciones adicionales..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success btn-lg" onclick="guardarReserva()">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+<script>
+// Versión móvil del dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    cargarEstadisticas();
+    cargarProximasReservasMobile();
+});
+
+async function cargarEstadisticas() {
+    try {
+        const response = await fetch('/api/reservas');
+        const reservas = await response.json();
+        
+        const hoy = new Date();
+        const primerDiaMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+        const ultimoDiaMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0);
+        
+        const reservasMes = reservas.filter(r => {
+            const fechaReserva = new Date(r.start);
+            return fechaReserva >= primerDiaMes && fechaReserva <= ultimoDiaMes;
+        });
+        
+        document.getElementById('reservas-mes').textContent = reservasMes.length;
+        
+        const ingresos = reservasMes.reduce((sum, r) => sum + (r.precio || 0), 0);
+        document.getElementById('ingresos-mes').textContent = ingresos.toFixed(0) + '€';
+        
+        const reservasFuturas = reservas
+            .filter(r => new Date(r.start) >= hoy)
+            .sort((a, b) => new Date(a.start) - new Date(b.start));
+        
+        if (reservasFuturas.length > 0) {
+            const proxima = reservasFuturas[0];
+            const fechaProxima = new Date(proxima.start);
+            const dias = Math.ceil((fechaProxima - hoy) / (1000 * 60 * 60 * 24));
+            
+            if (dias === 0) {
+                document.getElementById('proxima-reserva').textContent = 'Hoy';
+            } else if (dias === 1) {
+                document.getElementById('proxima-reserva').textContent = 'Mañana';
+            } else {
+                document.getElementById('proxima-reserva').textContent = dias + ' días';
+            }
+        }
+        
+    } catch (error) {
+        console.error('Error al cargar estadísticas:', error);
+    }
+}
+
+async function cargarProximasReservasMobile() {
+    try {
+        const response = await fetch('/api/reservas');
+        const reservas = await response.json();
+        
+        const hoy = new Date();
+        const proximasReservas = reservas
+            .filter(r => new Date(r.start) >= hoy)
+            .sort((a, b) => new Date(a.start) - new Date(b.start))
+            .slice(0, 5);
+        
+        const lista = document.getElementById('proximas-reservas-list');
+        
+        if (proximasReservas.length === 0) {
+            lista.innerHTML = `
+                <div class="list-group-item text-center text-muted py-4">
+                    <i class="bi bi-calendar-x" style="font-size: 2rem;"></i>
+                    <p class="mb-0 mt-2">No hay próximas reservas</p>
+                </div>
+            `;
+            return;
+        }
+        
+        lista.innerHTML = proximasReservas.map(r => {
+            const fecha = new Date(r.start);
+            const dias = Math.ceil((fecha - hoy) / (1000 * 60 * 60 * 24));
+            let badgeClass = 'bg-success';
+            let diasTexto = '';
+            
+            if (dias === 0) {
+                badgeClass = 'bg-danger';
+                diasTexto = 'Hoy';
+            } else if (dias === 1) {
+                badgeClass = 'bg-warning';
+                diasTexto = 'Mañana';
+            } else if (dias <= 7) {
+                badgeClass = 'bg-info';
+                diasTexto = `En ${dias} días`;
+            } else {
+                diasTexto = `En ${dias} días`;
+            }
+            
+            return `
+                <div class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">${r.cliente}</h6>
+                            <p class="mb-1 small text-muted">
+                                <i class="bi bi-calendar"></i> ${fecha.toLocaleDateString('es-ES')}
+                                ${r.invitados ? `· <i class="bi bi-people"></i> ${r.invitados}` : ''}
+                            </p>
+                            ${r.precio ? `<p class="mb-0 small"><strong>${r.precio.toFixed(2)}€</strong></p>` : ''}
+                        </div>
+                        <span class="badge ${badgeClass}">${diasTexto}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+    } catch (error) {
+        console.error('Error al cargar próximas reservas:', error);
+        document.getElementById('proximas-reservas-list').innerHTML = `
+            <div class="list-group-item text-center text-danger py-4">
+                <i class="bi bi-exclamation-triangle" style="font-size: 2rem;"></i>
+                <p class="mb-0 mt-2">Error al cargar reservas</p>
+            </div>
+        `;
+    }
+}
+
+async function guardarReserva() {
+    const form = document.getElementById('nuevaReservaForm');
+    const formData = new FormData(form);
+    
+    const data = {
+        cliente_nombre: formData.get('cliente_nombre'),
+        cliente_telefono: formData.get('cliente_telefono'),
+        cliente_email: formData.get('cliente_email'),
+        fecha_evento: formData.get('fecha_evento'),
+        hora_inicio: formData.get('hora_inicio'),
+        hora_fin: formData.get('hora_fin'),
+        num_invitados: parseInt(formData.get('num_invitados')) || 0,
+        tipo_celebracion: formData.get('tipo_celebracion'),
+        precio: parseFloat(formData.get('precio')) || 0,
+        anticipo: parseFloat(formData.get('anticipo')) || 0,
+        notas: formData.get('notas')
+    };
+    
+    try {
+        const response = await fetch('/api/reservas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            bootstrap.Modal.getInstance(document.getElementById('nuevaReservaModal')).hide();
+            form.reset();
+            
+            // Mostrar notificación
+            mostrarNotificacion('success', '✅ Reserva creada correctamente');
+            
+            // Recargar datos
+            setTimeout(() => {
+                cargarEstadisticas();
+                cargarProximasReservasMobile();
+            }, 500);
+        } else {
+            mostrarNotificacion('danger', '❌ ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        mostrarNotificacion('danger', '❌ Error al guardar la reserva');
+    }
+}
+
+function mostrarNotificacion(tipo, mensaje) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${tipo} alert-dismissible fade show position-fixed slide-up`;
+    alertDiv.style.cssText = 'top: 70px; left: 50%; transform: translateX(-50%); z-index: 9999; min-width: 90%; max-width: 500px;';
+    alertDiv.innerHTML = `
+        ${mensaje}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 4000);
+}
+</script>
+{% endblock %}

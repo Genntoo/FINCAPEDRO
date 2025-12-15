@@ -1,0 +1,415 @@
+{% extends "base.html" %}
+
+{% block title %}Reservas - Finca Rústica{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+            <h1 class="mb-0"><i class="bi bi-list-check"></i> Gestión de Reservas</h1>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaReservaModal">
+                <i class="bi bi-plus-circle"></i> <span class="d-none d-sm-inline">Nueva Reserva</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-4 mb-2">
+        <input type="text" class="form-control" id="buscarReserva" placeholder="Buscar por cliente o teléfono...">
+    </div>
+    <div class="col-md-3 mb-2">
+        <select class="form-select" id="filtroEstado">
+            <option value="">Todos los estados</option>
+            <option value="confirmada" selected>Confirmadas</option>
+            <option value="pendiente">Pendientes</option>
+            <option value="cancelada">Canceladas</option>
+        </select>
+    </div>
+    <div class="col-md-3 mb-2">
+        <select class="form-select" id="filtroTipo">
+            <option value="">Todos los tipos</option>
+            <option value="boda">Bodas</option>
+            <option value="cumpleaños">Cumpleaños</option>
+            <option value="comunion">Comuniones</option>
+            <option value="bautizo">Bautizos</option>
+            <option value="empresa">Eventos Empresa</option>
+            <option value="otro">Otros</option>
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Vista de tabla para desktop -->
+                <div class="table-responsive d-none d-md-block">
+                    <table class="table table-hover" id="tablaReservas">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Cliente</th>
+                                <th class="d-none d-lg-table-cell">Teléfono</th>
+                                <th class="d-none d-lg-table-cell">Tipo</th>
+                                <th class="d-none d-lg-table-cell">Invitados</th>
+                                <th>Precio</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if reservas %}
+                                {% for reserva in reservas %}
+                                <tr data-estado="{{ reserva.estado }}" data-tipo="{{ reserva.tipo_celebracion }}">
+                                    <td><strong>{{ reserva.fecha_evento.strftime('%d/%m/%Y') }}</strong></td>
+                                    <td>{{ reserva.cliente_nombre }}</td>
+                                    <td class="d-none d-lg-table-cell">{{ reserva.cliente_telefono }}</td>
+                                    <td class="d-none d-lg-table-cell">{{ reserva.tipo_celebracion or '-' }}</td>
+                                    <td class="d-none d-lg-table-cell">{{ reserva.num_invitados or '-' }}</td>
+                                    <td><strong>{{ '%.2f'|format(reserva.precio or 0) }}€</strong></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm dropdown-toggle 
+                                                {% if reserva.estado == 'confirmada' %}btn-success
+                                                {% elif reserva.estado == 'pendiente' %}btn-warning
+                                                {% else %}btn-danger{% endif %}" 
+                                                type="button" data-bs-toggle="dropdown">
+                                                {% if reserva.estado == 'confirmada' %}
+                                                    <i class="bi bi-check-circle"></i> Confirmada
+                                                {% elif reserva.estado == 'pendiente' %}
+                                                    <i class="bi bi-clock"></i> Pendiente
+                                                {% else %}
+                                                    <i class="bi bi-x-circle"></i> Cancelada
+                                                {% endif %}
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#" onclick="cambiarEstado({{ reserva.id }}, 'confirmada'); return false;">
+                                                    <i class="bi bi-check-circle text-success"></i> Confirmada
+                                                </a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="cambiarEstado({{ reserva.id }}, 'pendiente'); return false;">
+                                                    <i class="bi bi-clock text-warning"></i> Pendiente
+                                                </a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="cambiarEstado({{ reserva.id }}, 'cancelada'); return false;">
+                                                    <i class="bi bi-x-circle text-danger"></i> Cancelada
+                                                </a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button class="btn btn-info" onclick="verDetalle({{ reserva.id }})" title="Ver detalles">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-warning" onclick="enviarWhatsApp({{ reserva.id }}, '{{ reserva.cliente_telefono }}', '{{ reserva.cliente_nombre }}')" title="Enviar WhatsApp">
+                                                <i class="bi bi-whatsapp"></i>
+                                            </button>
+                                            <button class="btn btn-danger" onclick="eliminarReserva({{ reserva.id }})" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted py-4">No hay reservas registradas</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Vista de cards desplegables para móvil -->
+                <div class="d-md-none" id="reservasMovil">
+                    {% if reservas %}
+                        {% for reserva in reservas %}
+                        <div class="card mb-3 reserva-card" data-estado="{{ reserva.estado }}" data-tipo="{{ reserva.tipo_celebracion }}">
+                            <div class="card-header" data-bs-toggle="collapse" data-bs-target="#reserva{{ reserva.id }}" style="cursor: pointer;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">
+                                            <i class="bi bi-calendar-event"></i> {{ reserva.fecha_evento.strftime('%d/%m/%Y') }}
+                                        </h6>
+                                        <div class="text-muted small">
+                                            <i class="bi bi-person"></i> {{ reserva.cliente_nombre }}
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        {% if reserva.estado == 'confirmada' %}
+                                            <span class="badge bg-success mb-2">✓</span>
+                                        {% elif reserva.estado == 'pendiente' %}
+                                            <span class="badge bg-warning mb-2">⏰</span>
+                                        {% else %}
+                                            <span class="badge bg-danger mb-2">✕</span>
+                                        {% endif %}
+                                        <div class="small"><strong>{{ '%.2f'|format(reserva.precio or 0) }}€</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="collapse" id="reserva{{ reserva.id }}">
+                                <div class="card-body">
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">Teléfono</small>
+                                            <strong>{{ reserva.cliente_telefono }}</strong>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">Estado</small>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm dropdown-toggle w-100
+                                                    {% if reserva.estado == 'confirmada' %}btn-success
+                                                    {% elif reserva.estado == 'pendiente' %}btn-warning
+                                                    {% else %}btn-danger{% endif %}" 
+                                                    type="button" data-bs-toggle="dropdown">
+                                                    {% if reserva.estado == 'confirmada' %}
+                                                        <i class="bi bi-check-circle"></i> Confirmada
+                                                    {% elif reserva.estado == 'pendiente' %}
+                                                        <i class="bi bi-clock"></i> Pendiente
+                                                    {% else %}
+                                                        <i class="bi bi-x-circle"></i> Cancelada
+                                                    {% endif %}
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="#" onclick="cambiarEstado({{ reserva.id }}, 'confirmada'); return false;">
+                                                        <i class="bi bi-check-circle text-success"></i> Confirmada
+                                                    </a></li>
+                                                    <li><a class="dropdown-item" href="#" onclick="cambiarEstado({{ reserva.id }}, 'pendiente'); return false;">
+                                                        <i class="bi bi-clock text-warning"></i> Pendiente
+                                                    </a></li>
+                                                    <li><a class="dropdown-item" href="#" onclick="cambiarEstado({{ reserva.id }}, 'cancelada'); return false;">
+                                                        <i class="bi bi-x-circle text-danger"></i> Cancelada
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        {% if reserva.tipo_celebracion %}
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">Tipo</small>
+                                            <strong>{{ reserva.tipo_celebracion }}</strong>
+                                        </div>
+                                        {% endif %}
+                                        {% if reserva.num_invitados %}
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">Invitados</small>
+                                            <strong><i class="bi bi-people"></i> {{ reserva.num_invitados }}</strong>
+                                        </div>
+                                        {% endif %}
+                                        <div class="col-12">
+                                            <small class="text-muted d-block">Precio Total</small>
+                                            <h5 class="mb-0">{{ '%.2f'|format(reserva.precio or 0) }}€</h5>
+                                        </div>
+                                    </div>
+                                    
+                                    <hr class="my-3">
+                                    
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-info btn-sm" onclick="verDetalle({{ reserva.id }})">
+                                            <i class="bi bi-eye"></i> Ver Detalles
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" onclick="enviarWhatsApp({{ reserva.id }}, '{{ reserva.cliente_telefono }}', '{{ reserva.cliente_nombre }}')">
+                                            <i class="bi bi-whatsapp"></i> Enviar WhatsApp
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="eliminarReserva({{ reserva.id }})">
+                                            <i class="bi bi-trash"></i> Eliminar Reserva
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="card">
+                            <div class="card-body text-center text-muted py-5">
+                                <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                                <p class="mt-3">No hay reservas registradas</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Enviar WhatsApp -->
+<div class="modal fade" id="whatsappModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="bi bi-whatsapp"></i> Enviar Mensaje WhatsApp</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="whatsappForm">
+                    <input type="hidden" id="whatsapp_reserva_id">
+                    <div class="mb-3">
+                        <label class="form-label">Cliente</label>
+                        <input type="text" class="form-control" id="whatsapp_cliente" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" id="whatsapp_telefono" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Plantilla de mensaje</label>
+                        <select class="form-select" id="plantillaMensaje" onchange="aplicarPlantilla()">
+                            <option value="">Seleccionar plantilla...</option>
+                            <option value="confirmacion">Confirmación de reserva</option>
+                            <option value="recordatorio">Recordatorio 7 días antes</option>
+                            <option value="recordatorio_24h">Recordatorio 24 horas antes</option>
+                            <option value="agradecimiento">Agradecimiento post-evento</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mensaje</label>
+                        <textarea class="form-control" id="whatsapp_mensaje" rows="5" required></textarea>
+                        <div class="form-text">El mensaje se enviará vía WhatsApp Business</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="enviarMensajeWhatsApp()">
+                    <i class="bi bi-send"></i> Enviar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Reserva -->
+<div class="modal fade" id="nuevaReservaModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Nueva Reserva</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="reservaForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nombre del Cliente *</label>
+                            <input type="text" class="form-control" name="cliente_nombre" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Teléfono *</label>
+                            <input type="tel" class="form-control" name="cliente_telefono" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="cliente_email">
+                        </div>
+                        
+                        <!-- Selector de tipo de fechas -->
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Tipo de Reserva *</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="tipo_fecha" id="fecha_unica" value="unica" checked>
+                                <label class="btn btn-outline-success" for="fecha_unica">
+                                    <i class="bi bi-calendar-day"></i> Fecha Única
+                                </label>
+                                
+                                <input type="radio" class="btn-check" name="tipo_fecha" id="fecha_rango" value="rango">
+                                <label class="btn btn-outline-success" for="fecha_rango">
+                                    <i class="bi bi-calendar-range"></i> Rango de Fechas
+                                </label>
+                                
+                                <input type="radio" class="btn-check" name="tipo_fecha" id="fechas_multiples" value="multiples">
+                                <label class="btn btn-outline-success" for="fechas_multiples">
+                                    <i class="bi bi-calendar-check"></i> Fechas Específicas
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Fecha única -->
+                        <div id="contenedor-fecha-unica" class="col-md-12 mb-3">
+                            <label class="form-label">Fecha del Evento *</label>
+                            <input type="date" class="form-control" id="fecha_evento" name="fecha_evento">
+                        </div>
+
+                        <!-- Rango de fechas -->
+                        <div id="contenedor-fecha-rango" class="col-md-12 mb-3" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Fecha Inicio *</label>
+                                    <input type="date" class="form-control" id="fecha_inicio_rango">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Fecha Fin *</label>
+                                    <input type="date" class="form-control" id="fecha_fin_rango">
+                                </div>
+                            </div>
+                            <small class="text-muted">Se crearán reservas para todos los días del rango</small>
+                        </div>
+
+                        <!-- Fechas múltiples específicas -->
+                        <div id="contenedor-fechas-multiples" class="col-md-12 mb-3" style="display: none;">
+                            <label class="form-label">Fechas Seleccionadas *</label>
+                            <div class="input-group mb-2">
+                                <input type="date" class="form-control" id="nueva_fecha_multiple">
+                                <button type="button" class="btn btn-success" onclick="agregarFechaMultiple()">
+                                    <i class="bi bi-plus-lg"></i> Agregar
+                                </button>
+                            </div>
+                            <div id="lista-fechas-multiples" class="border rounded p-2" style="min-height: 60px; max-height: 200px; overflow-y: auto;">
+                                <small class="text-muted">Agrega las fechas específicas que deseas reservar</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hora Inicio *</label>
+                            <input type="time" class="form-control" name="hora_inicio" value="12:00" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hora Fin *</label>
+                            <input type="time" class="form-control" name="hora_fin" value="23:59" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tipo de Celebración</label>
+                            <select class="form-select" name="tipo_celebracion">
+                                <option value="">Seleccionar...</option>
+                                <option value="boda">Boda</option>
+                                <option value="cumpleaños">Cumpleaños</option>
+                                <option value="comunion">Comunión</option>
+                                <option value="bautizo">Bautizo</option>
+                                <option value="empresa">Evento Empresa</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Número de Invitados</label>
+                            <input type="number" class="form-control" name="num_invitados" min="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Precio por Día (€)</label>
+                            <input type="number" class="form-control" name="precio" step="0.01" min="0">
+                            <small class="text-muted" id="precio-total-info"></small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Anticipo (€)</label>
+                            <input type="number" class="form-control" name="anticipo" step="0.01" min="0" value="0">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Notas</label>
+                            <textarea class="form-control" name="notas" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="guardarReserva()">
+                    <i class="bi bi-save"></i> <span id="texto-guardar">Guardar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/reservas.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

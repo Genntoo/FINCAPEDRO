@@ -1,0 +1,1692 @@
+/* ========================================
+   FINCA RÚSTICA - TEMA PASTEL ELEGANTE
+   Colores suaves, diseño limpio, fuente formal
+   ======================================== */
+
+/* ==================== IMPORTAR FUENTES FORMALES ==================== */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap');
+
+/* Fuentes:
+   - Playfair Display: Títulos elegantes
+   - Lato: Texto general (limpia y profesional)
+*/
+
+/* ==================== VARIABLES DE COLORES PASTEL ==================== */
+:root {
+    /* Colores primarios - Tonos pastel suaves */
+    --pastel-green: #b8d4c8;
+    --pastel-mint: #d4e9e2;
+    --pastel-sage: #9dc0b3;
+    --pastel-cream: #faf8f3;
+    --pastel-beige: #f5f0e8;
+    
+    /* Colores de acento */
+    --pastel-rose: #e8c5c5;
+    --pastel-lavender: #d4c5e8;
+    --pastel-peach: #f5d5c0;
+    --pastel-sky: #c5d8e8;
+    
+    /* Colores neutros */
+    --white: #ffffff;
+    --off-white: #fafafa;
+    --light-gray: #f0f0f0;
+    --medium-gray: #d0d0d0;
+    --text-gray: #5a5a5a;
+    --dark-gray: #3a3a3a;
+    
+    /* Colores de estado */
+    --success: #a8d5ba;
+    --warning: #f5d5a8;
+    --danger: #f5b5b5;
+    --info: #b5d5f5;
+    
+    /* Sombras suaves */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
+    
+    /* Fuentes */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Lato', sans-serif;
+}
+
+/* ==================== RESET Y BASE ==================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-gray);
+    background-color: var(--pastel-cream);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==================== TIPOGRAFÍA ==================== */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--dark-gray);
+    line-height: 1.3;
+    margin-bottom: 0.8rem;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+h2 {
+    font-size: 1.6rem;
+}
+
+h3 {
+    font-size: 1.3rem;
+}
+
+h4 {
+    font-size: 1.1rem;
+}
+
+h5, h6 {
+    font-size: 1rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--pastel-sage);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--pastel-green);
+}
+
+/* ==================== NAVBAR SIMPLIFICADA ==================== */
+
+.navbar {
+    background: linear-gradient(135deg, var(--pastel-mint) 0%, var(--pastel-green) 100%) !important;
+    box-shadow: var(--shadow-sm);
+    padding: 0.8rem 1.5rem;
+    border: none;
+}
+
+.navbar-brand {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark-gray) !important;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand i {
+    color: var(--pastel-sage);
+    margin-right: 0.5rem;
+}
+
+.nav-link {
+    font-family: var(--font-body);
+    font-weight: 400;
+    color: var(--dark-gray) !important;
+    padding: 0.6rem 1.2rem !important;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: var(--pastel-sage) !important;
+}
+
+.nav-link i {
+    margin-right: 0.4rem;
+    font-size: 1.1rem;
+}
+
+/* ==================== CARDS SIMPLIFICADAS ==================== */
+
+.card {
+    background-color: var(--white);
+    border: 1px solid var(--light-gray);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--pastel-mint) 0%, var(--pastel-green) 100%);
+    border-bottom: none;
+    padding: 1.2rem 1.5rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--dark-gray);
+    border-radius: 16px 16px 0 0;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-footer {
+    background-color: var(--pastel-beige);
+    border-top: 1px solid var(--light-gray);
+    padding: 1rem 1.5rem;
+}
+
+/* Cards de Dashboard */
+.dashboard-card {
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.dashboard-card .card-body {
+    padding: 1.8rem;
+}
+
+.dashboard-card h2 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+    color: var(--dark-gray);
+}
+
+.dashboard-card h6 {
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+/* Colores pastel para las cards de stats */
+.bg-primary {
+    background: linear-gradient(135deg, var(--pastel-sky) 0%, #a8c5e8 100%) !important;
+    color: var(--dark-gray) !important;
+}
+
+.bg-success {
+    background: linear-gradient(135deg, var(--success) 0%, #8fc5a0 100%) !important;
+    color: var(--dark-gray) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, var(--warning) 0%, #f5c585 100%) !important;
+    color: var(--dark-gray) !important;
+}
+
+.bg-info {
+    background: linear-gradient(135deg, var(--info) 0%, #95c5f5 100%) !important;
+    color: var(--dark-gray) !important;
+}
+
+/* ==================== BOTONES ELEGANTES ==================== */
+
+.btn {
+    font-family: var(--font-body);
+    font-weight: 500;
+    padding: 0.7rem 1.8rem;
+    border-radius: 12px;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    letter-spacing: 0.3px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--pastel-sky) 0%, #a8c5e8 100%);
+    color: var(--dark-gray);
+    border: 1px solid rgba(168, 197, 232, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #a8c5e8 0%, #95b5d8 100%);
+    color: var(--dark-gray);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success) 0%, #8fc5a0 100%);
+    color: var(--dark-gray);
+    border: 1px solid rgba(168, 213, 186, 0.3);
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #8fc5a0 0%, #7ab590 100%);
+    color: var(--dark-gray);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--warning) 0%, #f5c585 100%);
+    color: var(--dark-gray);
+    border: 1px solid rgba(245, 213, 168, 0.3);
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #f5c585 0%, #e5b575 100%);
+    color: var(--dark-gray);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, #f59595 100%);
+    color: var(--dark-gray);
+    border: 1px solid rgba(245, 181, 181, 0.3);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #f59595 0%, #e58585 100%);
+    color: var(--dark-gray);
+}
+
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-warning,
+.btn-outline-danger {
+    background: transparent;
+    border: 2px solid;
+    font-weight: 500;
+}
+
+.btn-outline-primary {
+    border-color: var(--pastel-sky);
+    color: var(--pastel-sky);
+}
+
+.btn-outline-primary:hover {
+    background: var(--pastel-sky);
+    color: var(--dark-gray);
+}
+
+.btn-outline-success {
+    border-color: var(--success);
+    color: var(--success);
+}
+
+.btn-outline-success:hover {
+    background: var(--success);
+    color: var(--dark-gray);
+}
+
+/* Botón flotante (FAB) */
+.btn-floating {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--success) 0%, #8fc5a0 100%);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.btn-floating:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.btn-floating i {
+    font-size: 1.8rem;
+    color: var(--dark-gray);
+}
+
+/* ==================== FORMULARIOS LIMPIOS ==================== */
+
+.form-label {
+    font-family: var(--font-body);
+    font-weight: 500;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+}
+
+.form-control,
+.form-select {
+    font-family: var(--font-body);
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--light-gray);
+    border-radius: 10px;
+    background-color: var(--white);
+    color: var(--text-gray);
+    transition: all 0.3s;
+    font-size: 0.95rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--pastel-sage);
+    box-shadow: 0 0 0 3px rgba(157, 192, 179, 0.1);
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: var(--medium-gray);
+    font-style: italic;
+}
+
+/* ==================== TABLAS MINIMALISTAS ==================== */
+
+.table {
+    background-color: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 0.9rem;
+}
+
+.table thead {
+    background: linear-gradient(135deg, var(--pastel-mint) 0%, var(--pastel-green) 100%);
+}
+
+.table thead th {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--dark-gray);
+    border: none;
+    padding: 1rem;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid var(--light-gray);
+    transition: background-color 0.2s;
+}
+
+.table tbody tr:hover {
+    background-color: var(--pastel-beige);
+}
+
+.table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    color: var(--text-gray);
+}
+
+.table-responsive {
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ==================== BADGES SUAVES ==================== */
+
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+}
+
+.bg-success {
+    background-color: var(--success) !important;
+    color: var(--dark-gray) !important;
+}
+
+.bg-warning {
+    background-color: var(--warning) !important;
+    color: var(--dark-gray) !important;
+}
+
+.bg-danger {
+    background-color: var(--danger) !important;
+    color: var(--dark-gray) !important;
+}
+
+.bg-info {
+    background-color: var(--info) !important;
+    color: var(--dark-gray) !important;
+}
+
+/* ==================== ALERTAS ELEGANTES ==================== */
+
+.alert {
+    border: none;
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    box-shadow: var(--shadow-sm);
+    font-family: var(--font-body);
+}
+
+.alert-success {
+    background-color: var(--success);
+    color: var(--dark-gray);
+}
+
+.alert-warning {
+    background-color: var(--warning);
+    color: var(--dark-gray);
+}
+
+.alert-danger {
+    background-color: var(--danger);
+    color: var(--dark-gray);
+}
+
+.alert-info {
+    background-color: var(--info);
+    color: var(--dark-gray);
+}
+
+/* ==================== MODALES SUAVES ==================== */
+
+.modal-content {
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--pastel-mint) 0%, var(--pastel-green) 100%);
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    padding: 1.5rem;
+}
+
+.modal-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+.modal-body {
+    padding: 1.8rem;
+    background-color: var(--white);
+}
+
+.modal-footer {
+    background-color: var(--pastel-beige);
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    padding: 1.2rem 1.5rem;
+}
+
+.btn-close {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+/* ==================== CALENDARIO RESPONSIVE ==================== */
+
+#calendar {
+    background-color: var(--white);
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    font-family: var(--font-body);
+}
+
+/* Toolbar del calendario */
+.fc .fc-toolbar {
+    padding: 1rem;
+    background-color: var(--pastel-beige);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.fc .fc-toolbar-title {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin: 0;
+}
+
+/* Botones del calendario */
+.fc .fc-button {
+    background: linear-gradient(135deg, var(--pastel-mint) 0%, var(--pastel-green) 100%);
+    border: 1px solid var(--light-gray);
+    color: var(--dark-gray);
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
+}
+
+.fc .fc-button:hover {
+    background: linear-gradient(135deg, var(--pastel-green) 0%, var(--pastel-sage) 100%);
+    box-shadow: var(--shadow-md);
+}
+
+.fc .fc-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.fc .fc-button-active {
+    background: linear-gradient(135deg, var(--pastel-sage) 0%, var(--pastel-green) 100%);
+    box-shadow: var(--shadow-md);
+}
+
+/* Encabezados de días */
+.fc .fc-col-header-cell {
+    background-color: var(--pastel-beige);
+    padding: 0.8rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--dark-gray);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+/* Celdas de días */
+.fc .fc-daygrid-day {
+    background-color: var(--white);
+    transition: background-color 0.2s;
+}
+
+.fc .fc-daygrid-day:hover {
+    background-color: var(--pastel-cream);
+}
+
+.fc .fc-daygrid-day-number {
+    font-family: var(--font-body);
+    font-weight: 500;
+    color: var(--text-gray);
+    padding: 0.5rem;
+}
+
+.fc .fc-day-today {
+    background-color: rgba(168, 213, 186, 0.15) !important;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+    background-color: var(--success);
+    color: var(--dark-gray);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+/* Eventos */
+.fc-event {
+    background: linear-gradient(135deg, var(--pastel-sage) 0%, var(--pastel-green) 100%);
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--dark-gray);
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+}
+
+.fc-event:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-md);
+}
+
+.fc-event-title {
+    font-weight: 600;
+}
+
+/* Responsive del calendario */
+@media (max-width: 768px) {
+    .fc .fc-toolbar {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .fc .fc-toolbar-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .fc .fc-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .fc .fc-col-header-cell {
+        font-size: 0.7rem;
+        padding: 0.5rem;
+    }
+    
+    .fc .fc-daygrid-day-number {
+        font-size: 0.85rem;
+    }
+    
+    .fc-event {
+        font-size: 0.75rem;
+        padding: 2px 6px;
+    }
+}
+
+@media (max-width: 576px) {
+    #calendar {
+        padding: 0.8rem;
+    }
+    
+    .fc .fc-toolbar {
+        padding: 0.8rem;
+    }
+    
+    .fc .fc-toolbar-title {
+        font-size: 1rem;
+    }
+    
+    .fc .fc-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .fc .fc-col-header-cell {
+        font-size: 0.65rem;
+        padding: 0.4rem;
+    }
+}
+
+/* ==================== CONVERSACIONES WHATSAPP ==================== */
+
+#areaConversacion {
+    background-color: var(--pastel-cream);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+#areaConversacion .bg-success {
+    background: linear-gradient(135deg, #d4f5e4 0%, #c5e8d8 100%) !important;
+    color: var(--dark-gray) !important;
+    border-radius: 12px 12px 4px 12px;
+    box-shadow: var(--shadow-sm);
+    padding: 0.8rem 1rem;
+}
+
+#areaConversacion .bg-white {
+    background-color: var(--white) !important;
+    color: var(--dark-gray) !important;
+    border-radius: 12px 12px 12px 4px;
+    box-shadow: var(--shadow-sm);
+    padding: 0.8rem 1rem;
+}
+
+.list-group-item {
+    border: 1px solid var(--light-gray);
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: var(--pastel-beige);
+    transform: translateX(4px);
+}
+
+.list-group-item.active {
+    background: linear-gradient(135deg, var(--pastel-mint) 0%, var(--pastel-green) 100%) !important;
+    border-color: var(--pastel-green) !important;
+    color: var(--dark-gray) !important;
+}
+
+#areaEnvio input {
+    border-radius: 24px;
+    border: 2px solid var(--light-gray);
+    padding: 0.8rem 1.2rem;
+}
+
+#areaEnvio button {
+    border-radius: 24px;
+    padding: 0.8rem 1.5rem;
+}
+
+/* ==================== NAVEGACIÓN INFERIOR MÓVIL ==================== */
+
+.bottom-nav {
+    background: linear-gradient(to top, var(--white) 0%, var(--pastel-beige) 100%);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+    border-top: 1px solid var(--light-gray);
+}
+
+.bottom-nav-item {
+    color: var(--medium-gray);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.bottom-nav-item.active {
+    color: var(--pastel-sage);
+    background-color: rgba(157, 192, 179, 0.1);
+}
+
+.bottom-nav-item:hover {
+    color: var(--pastel-green);
+    background-color: rgba(157, 192, 179, 0.05);
+}
+
+/* ==================== NAVEGACIÓN INFERIOR MÓVIL ==================== */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, var(--white) 0%, var(--pastel-beige) 100%);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+    border-top: 1px solid var(--light-gray);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.5rem 0;
+    z-index: 1000;
+    display: none; /* Oculto por defecto, visible solo en móvil */
+}
+
+.bottom-nav-item {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    color: var(--medium-gray);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.3s;
+    border-radius: 8px;
+}
+
+.bottom-nav-item i {
+    font-size: 1.5rem;
+}
+
+.bottom-nav-item.active {
+    color: var(--pastel-sage);
+    background-color: rgba(157, 192, 179, 0.1);
+}
+
+.bottom-nav-item:hover {
+    color: var(--pastel-green);
+    background-color: rgba(157, 192, 179, 0.05);
+}
+
+/* Mostrar navegación inferior solo en móvil */
+@media (max-width: 768px) {
+    .bottom-nav {
+        display: flex;
+    }
+    
+    body {
+        padding-bottom: 70px; /* Espacio para el menú inferior */
+    }
+}
+
+/* ==================== UTILIDADES ==================== */
+
+.text-muted {
+    color: var(--medium-gray) !important;
+}
+
+.bg-light {
+    background-color: var(--pastel-beige) !important;
+}
+
+/* ==================== ANIMACIONES SUAVES ==================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* ==================== SCROLLBAR PERSONALIZADA ==================== */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--pastel-beige);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--pastel-mint) 0%, var(--pastel-green) 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--pastel-green) 0%, var(--pastel-sage) 100%);
+}
+
+/* ==================== MODO OSCURO (DARK MODE) ==================== */
+
+/* Variables para modo oscuro */
+:root {
+    /* Modo oscuro activado siempre */
+    --dark-bg-primary: #1a1a1a;
+    --dark-bg-secondary: #252525;
+    --dark-bg-tertiary: #2d2d2d;
+    --dark-bg-card: #2a2a2a;
+    --dark-border: #3a3a3a;
+    --dark-text-primary: #e8e8e8;
+    --dark-text-secondary: #b8b8b8;
+    --dark-text-muted: #888888;
+    
+    /* Colores pastel ajustados para oscuro */
+    --dark-pastel-green: #7a9d8d;
+    --dark-pastel-mint: #6b8d7d;
+    --dark-pastel-sage: #5d7d6d;
+    --dark-pastel-rose: #9d7a7a;
+    --dark-pastel-lavender: #8d7a9d;
+    --dark-pastel-peach: #9d8d7a;
+    --dark-pastel-sky: #7a8d9d;
+}
+
+/* Aplicar tema oscuro globalmente */
+body {
+    background-color: var(--dark-bg-primary);
+    color: var(--dark-text-primary);
+}
+
+/* ==================== ELEMENTOS BASE OSCUROS ==================== */
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--dark-text-primary);
+}
+
+a {
+    color: var(--dark-pastel-green);
+}
+
+a:hover {
+    color: var(--dark-pastel-mint);
+}
+
+/* ==================== NAVBAR OSCURA ==================== */
+
+.navbar {
+    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, var(--dark-bg-tertiary) 100%) !important;
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.navbar-brand,
+.nav-link {
+    color: var(--dark-text-primary) !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: rgba(122, 157, 141, 0.2);
+    color: var(--dark-pastel-green) !important;
+}
+
+/* ==================== CARDS OSCURAS ==================== */
+
+.card {
+    background-color: var(--dark-bg-card);
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, var(--dark-bg-tertiary) 100%);
+    border-bottom: 1px solid var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+.card-footer {
+    background-color: var(--dark-bg-secondary);
+    border-top: 1px solid var(--dark-border);
+}
+
+/* Cards del Dashboard - Oscuras */
+.dashboard-card h2,
+.dashboard-card h6 {
+    color: var(--dark-text-primary);
+}
+
+/* Colores pastel oscuros para stats */
+.bg-primary {
+    background: linear-gradient(135deg, var(--dark-pastel-sky) 0%, #6a7d8d 100%) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+.bg-success {
+    background: linear-gradient(135deg, var(--dark-pastel-green) 0%, #6a8d7a 100%) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, var(--dark-pastel-peach) 0%, #8d7d6a 100%) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+.bg-info {
+    background: linear-gradient(135deg, var(--dark-pastel-sky) 0%, #6a7d8d 100%) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+.bg-danger {
+    background: linear-gradient(135deg, var(--dark-pastel-rose) 0%, #8d6a6a 100%) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+/* ==================== BOTONES OSCUROS ==================== */
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--dark-pastel-sky) 0%, #6a7d8d 100%);
+    color: var(--dark-text-primary);
+    border: 1px solid var(--dark-border);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #6a7d8d 0%, #5a6d7d 100%);
+    color: var(--dark-text-primary);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--dark-pastel-green) 0%, #6a8d7a 100%);
+    color: var(--dark-text-primary);
+    border: 1px solid var(--dark-border);
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #6a8d7a 0%, #5a7d6a 100%);
+    color: var(--dark-text-primary);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--dark-pastel-peach) 0%, #8d7d6a 100%);
+    color: var(--dark-text-primary);
+    border: 1px solid var(--dark-border);
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #8d7d6a 0%, #7d6d5a 100%);
+    color: var(--dark-text-primary);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--dark-pastel-rose) 0%, #8d6a6a 100%);
+    color: var(--dark-text-primary);
+    border: 1px solid var(--dark-border);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #8d6a6a 0%, #7d5a5a 100%);
+    color: var(--dark-text-primary);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, var(--dark-pastel-sky) 0%, #6a7d8d 100%);
+    color: var(--dark-text-primary);
+    border: 1px solid var(--dark-border);
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #6a7d8d 0%, #5a6d7d 100%);
+    color: var(--dark-text-primary);
+}
+
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-warning,
+.btn-outline-danger,
+.btn-outline-info {
+    background: transparent;
+    color: var(--dark-text-primary);
+    border: 2px solid var(--dark-border);
+}
+
+.btn-outline-success:hover {
+    background: var(--dark-pastel-green);
+    color: var(--dark-text-primary);
+}
+
+.btn-secondary {
+    background-color: var(--dark-bg-tertiary);
+    color: var(--dark-text-primary);
+    border: 1px solid var(--dark-border);
+}
+
+.btn-secondary:hover {
+    background-color: var(--dark-bg-secondary);
+    color: var(--dark-text-primary);
+}
+
+.btn-light {
+    background-color: var(--dark-bg-tertiary);
+    color: var(--dark-text-primary);
+    border: 1px solid var(--dark-border);
+}
+
+.btn-light:hover {
+    background-color: var(--dark-bg-secondary);
+    color: var(--dark-text-primary);
+}
+
+/* ==================== FORMULARIOS OSCUROS ==================== */
+
+.form-label {
+    color: var(--dark-text-primary);
+}
+
+.form-control,
+.form-select {
+    background-color: var(--dark-bg-tertiary);
+    border: 2px solid var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--dark-bg-tertiary);
+    border-color: var(--dark-pastel-green);
+    box-shadow: 0 0 0 3px rgba(122, 157, 141, 0.2);
+    color: var(--dark-text-primary);
+}
+
+.form-control::placeholder {
+    color: var(--dark-text-muted);
+}
+
+.input-group-text {
+    background-color: var(--dark-bg-secondary);
+    border: 2px solid var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+/* ==================== TABLAS OSCURAS ==================== */
+
+.table {
+    background-color: var(--dark-bg-card);
+    color: var(--dark-text-primary);
+}
+
+.table thead {
+    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, var(--dark-bg-tertiary) 100%);
+}
+
+.table thead th {
+    color: var(--dark-text-primary);
+    border-bottom: 2px solid var(--dark-border);
+}
+
+.table tbody tr {
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.table tbody tr:hover {
+    background-color: var(--dark-bg-secondary);
+}
+
+.table tbody td {
+    color: var(--dark-text-primary);
+}
+
+.table-success {
+    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, var(--dark-bg-tertiary) 100%) !important;
+}
+
+.table-success th {
+    color: var(--dark-text-primary) !important;
+}
+
+/* ==================== TABLAS OSCURAS ==================== */
+
+.table {
+    background-color: var(--dark-bg-card);
+    color: var(--dark-text-primary);
+    border-color: var(--dark-border);
+}
+
+.table thead {
+    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, var(--dark-bg-tertiary) 100%);
+}
+
+.table thead th {
+    color: var(--dark-text-primary);
+    border-bottom: 2px solid var(--dark-border);
+    border-color: var(--dark-border);
+    background-color: transparent;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid var(--dark-border);
+    border-color: var(--dark-border);
+}
+
+.table tbody tr:hover {
+    background-color: var(--dark-bg-secondary);
+}
+
+.table tbody td {
+    color: var(--dark-text-primary);
+    border-color: var(--dark-border);
+}
+
+.table-success {
+    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, var(--dark-bg-tertiary) 100%) !important;
+}
+
+.table-success th {
+    color: var(--dark-text-primary) !important;
+    background-color: transparent !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--dark-bg-secondary);
+}
+
+/* Forzar tema oscuro en todas las tablas */
+.table > :not(caption) > * > * {
+    background-color: transparent;
+    border-bottom-color: var(--dark-border);
+}
+
+.table-bordered > :not(caption) > * {
+    border-width: 1px 0;
+    border-color: var(--dark-border);
+}
+
+.table-bordered > :not(caption) > * > * {
+    border-width: 0 1px;
+    border-color: var(--dark-border);
+}
+
+/* Table responsive */
+.table-responsive {
+    background-color: var(--dark-bg-card);
+}
+
+/* ==================== BADGES OSCUROS ==================== */
+
+.badge {
+    font-weight: 500;
+}
+
+.badge.bg-success {
+    background-color: var(--dark-pastel-green) !important;
+    color: var(--dark-bg-primary) !important;
+}
+
+.badge.bg-warning {
+    background-color: var(--dark-pastel-peach) !important;
+    color: var(--dark-bg-primary) !important;
+}
+
+.badge.bg-danger {
+    background-color: var(--dark-pastel-rose) !important;
+    color: var(--dark-bg-primary) !important;
+}
+
+.badge.bg-info {
+    background-color: var(--dark-pastel-sky) !important;
+    color: var(--dark-bg-primary) !important;
+}
+
+/* ==================== ALERTAS OSCURAS ==================== */
+
+.alert {
+    border: 1px solid var(--dark-border);
+}
+
+.alert-success {
+    background-color: var(--dark-pastel-green);
+    color: var(--dark-bg-primary);
+}
+
+.alert-warning {
+    background-color: var(--dark-pastel-peach);
+    color: var(--dark-bg-primary);
+}
+
+.alert-danger {
+    background-color: var(--dark-pastel-rose);
+    color: var(--dark-bg-primary);
+}
+
+.alert-info {
+    background-color: var(--dark-pastel-sky);
+    color: var(--dark-bg-primary);
+}
+
+/* ==================== MODALES OSCUROS ==================== */
+
+.modal-content {
+    background-color: var(--dark-bg-card);
+    border: 1px solid var(--dark-border);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, var(--dark-bg-tertiary) 100%);
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.modal-title {
+    color: var(--dark-text-primary);
+}
+
+.modal-body {
+    background-color: var(--dark-bg-card);
+    color: var(--dark-text-primary);
+}
+
+.modal-footer {
+    background-color: var(--dark-bg-secondary);
+    border-top: 1px solid var(--dark-border);
+}
+
+.btn-close {
+    filter: invert(1);
+}
+
+.btn-close-white {
+    filter: invert(0);
+}
+
+/* ==================== CALENDARIO OSCURO ==================== */
+
+#calendar {
+    background-color: var(--dark-bg-card);
+    color: var(--dark-text-primary);
+}
+
+.fc .fc-toolbar {
+    background-color: var(--dark-bg-secondary);
+    border: 1px solid var(--dark-border);
+}
+
+.fc .fc-toolbar-title {
+    color: var(--dark-text-primary);
+}
+
+.fc .fc-button {
+    background: linear-gradient(135deg, var(--dark-bg-tertiary) 0%, var(--dark-bg-secondary) 100%);
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+.fc .fc-button:hover {
+    background: linear-gradient(135deg, var(--dark-pastel-green) 0%, var(--dark-pastel-sage) 100%);
+}
+
+.fc .fc-button-active {
+    background: linear-gradient(135deg, var(--dark-pastel-green) 0%, var(--dark-pastel-sage) 100%);
+}
+
+.fc .fc-col-header-cell {
+    background-color: var(--dark-bg-secondary);
+    color: var(--dark-text-primary);
+    border-color: var(--dark-border);
+}
+
+.fc .fc-daygrid-day {
+    background-color: var(--dark-bg-card);
+    border-color: var(--dark-border);
+}
+
+.fc .fc-daygrid-day:hover {
+    background-color: var(--dark-bg-secondary);
+}
+
+.fc .fc-daygrid-day-number {
+    color: var(--dark-text-primary);
+}
+
+.fc .fc-day-today {
+    background-color: rgba(122, 157, 141, 0.2) !important;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+    background-color: var(--dark-pastel-green);
+    color: var(--dark-bg-primary);
+}
+
+.fc-event {
+    background: linear-gradient(135deg, var(--dark-pastel-green) 0%, var(--dark-pastel-sage) 100%);
+    color: var(--dark-bg-primary);
+    border: none;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border-color: var(--dark-border);
+}
+
+/* ==================== CONVERSACIONES WHATSAPP OSCURAS ==================== */
+
+#areaConversacion {
+    background-color: var(--dark-bg-primary);
+}
+
+#areaConversacion .bg-success {
+    background: linear-gradient(135deg, var(--dark-pastel-green) 0%, #6a8d7a 100%) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+#areaConversacion .bg-white {
+    background-color: var(--dark-bg-tertiary) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+.list-group-item {
+    background-color: var(--dark-bg-card);
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+.list-group-item:hover {
+    background-color: var(--dark-bg-secondary);
+}
+
+.list-group-item.active {
+    background: linear-gradient(135deg, var(--dark-pastel-green) 0%, var(--dark-pastel-sage) 100%) !important;
+    border-color: var(--dark-pastel-green) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+/* ==================== NAVEGACIÓN INFERIOR OSCURA ==================== */
+
+.bottom-nav {
+    background: linear-gradient(to top, var(--dark-bg-card) 0%, var(--dark-bg-secondary) 100%);
+    border-top: 1px solid var(--dark-border);
+}
+
+.bottom-nav-item {
+    color: var(--dark-text-secondary);
+}
+
+.bottom-nav-item.active {
+    color: var(--dark-pastel-green);
+    background-color: rgba(122, 157, 141, 0.2);
+}
+
+.bottom-nav-item:hover {
+    color: var(--dark-pastel-mint);
+    background-color: rgba(122, 157, 141, 0.1);
+}
+
+/* ==================== UTILIDADES OSCURAS ==================== */
+
+.text-muted {
+    color: var(--dark-text-muted) !important;
+}
+
+.bg-light {
+    background-color: var(--dark-bg-secondary) !important;
+}
+
+.border {
+    border-color: var(--dark-border) !important;
+}
+
+/* ==================== SCROLLBAR OSCURA ==================== */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--dark-pastel-green) 0%, var(--dark-pastel-sage) 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--dark-pastel-sage) 0%, var(--dark-pastel-mint) 100%);
+}
+
+/* ==================== DROPDOWN OSCURO ==================== */
+
+.dropdown-menu {
+    background-color: var(--dark-bg-card);
+    border: 1px solid var(--dark-border);
+}
+
+.dropdown-item {
+    color: var(--dark-text-primary);
+}
+
+.dropdown-item:hover {
+    background-color: var(--dark-bg-secondary);
+    color: var(--dark-pastel-green);
+}
+
+.dropdown-divider {
+    border-top-color: var(--dark-border);
+}
+
+/* ==================== ENLACES DE TEXTO ==================== */
+
+.text-decoration-none {
+    color: var(--dark-text-primary);
+}
+
+.text-decoration-none:hover {
+    color: var(--dark-pastel-green);
+}
+
+/* ==================== CARDS DE RESERVAS MÓVILES ==================== */
+
+.reserva-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.reserva-card[data-estado="confirmada"] {
+    border-left-color: var(--dark-pastel-green);
+}
+
+.reserva-card[data-estado="pendiente"] {
+    border-left-color: var(--dark-pastel-peach);
+}
+
+.reserva-card[data-estado="cancelada"] {
+    border-left-color: var(--dark-pastel-rose);
+}
+
+.reserva-card .card-header {
+    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, var(--dark-bg-tertiary) 100%);
+    border-bottom: 1px solid var(--dark-border);
+    padding: 1rem;
+}
+
+.reserva-card .card-header:hover {
+    background: linear-gradient(135deg, var(--dark-bg-tertiary) 0%, var(--dark-bg-secondary) 100%);
+}
+
+.reserva-card .card-body {
+    background-color: var(--dark-bg-card);
+    padding: 1rem;
+}
+
+.reserva-card .collapse {
+    transition: all 0.3s ease;
+}
+
+.reserva-card hr {
+    border-color: var(--dark-border);
+    opacity: 0.3;
+}
+
+.reserva-card .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.6rem;
+}
+
+/* Animación al expandir */
+.reserva-card .collapsing {
+    transition: height 0.35s ease;
+}
+
+/* Cards del dashboard móvil - más compactas */
+#proximas-reservas-cards .reserva-card {
+    margin-bottom: 0.75rem;
+}
+
+#proximas-reservas-cards .reserva-card .card-header {
+    padding: 0.75rem;
+}
+
+#proximas-reservas-cards .reserva-card h6 {
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+/* ==================== SELECTOR DE FECHAS MÚLTIPLES ==================== */
+
+#lista-fechas-multiples {
+    background-color: var(--dark-bg-secondary);
+    border-color: var(--dark-border) !important;
+}
+
+#lista-fechas-multiples .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    font-weight: 500;
+}
+
+#lista-fechas-multiples .btn-close-white {
+    opacity: 0.8;
+}
+
+#lista-fechas-multiples .btn-close-white:hover {
+    opacity: 1;
+}
+
+.btn-check:checked + .btn-outline-success {
+    background-color: var(--dark-pastel-green);
+    border-color: var(--dark-pastel-green);
+    color: var(--dark-bg-primary);
+}
+
+.btn-outline-success {
+    border-color: var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+.btn-outline-success:hover {
+    background-color: var(--dark-pastel-green);
+    border-color: var(--dark-pastel-green);
+    color: var(--dark-bg-primary);
+}
+
+#precio-total-info {
+    color: var(--dark-pastel-green);
+    font-weight: 500;
+}
+
+/* ==================== RESPONSIVE GENERAL ==================== */
+
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: 1.6rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    .card {
+        border-radius: 12px;
+    }
+    
+    .btn {
+        padding: 0.6rem 1.4rem;
+    }
+}
+
+/* ==================== MODO IMPRESIÓN ==================== */
+
+@media print {
+    body {
+        background-color: white;
+    }
+    
+    .navbar,
+    .btn-floating,
+    .bottom-nav {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}

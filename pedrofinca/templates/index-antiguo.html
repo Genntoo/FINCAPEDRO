@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Finca Rústica{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4"><i class="bi bi-speedometer2"></i> Panel de Control</h1>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Reservas del Mes</h6>
+                        <h2 id="reservas-mes">0</h2>
+                    </div>
+                    <i class="bi bi-calendar-check" style="font-size: 3rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Ingresos del Mes</h6>
+                        <h2 id="ingresos-mes">0€</h2>
+                    </div>
+                    <i class="bi bi-cash-coin" style="font-size: 3rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Mensajes Enviados</h6>
+                        <h2 id="mensajes-enviados">0</h2>
+                    </div>
+                    <i class="bi bi-whatsapp" style="font-size: 3rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Próxima Reserva</h6>
+                        <h6 id="proxima-reserva">-</h6>
+                    </div>
+                    <i class="bi bi-calendar-event" style="font-size: 3rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-calendar-week"></i> Próximas Reservas</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Cliente</th>
+                                <th>Tipo</th>
+                                <th>Invitados</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="proximas-reservas-table">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Estadísticas</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="tiposCelebracionChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Accesos Rápidos</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('calendario') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-calendar"></i> Ver Calendario
+                    </a>
+                    <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#nuevaReservaModal">
+                        <i class="bi bi-plus-circle"></i> Nueva Reserva
+                    </button>
+                    <a href="{{ url_for('mensajes') }}" class="btn btn-outline-warning">
+                        <i class="bi bi-whatsapp"></i> Enviar Mensaje
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Reserva -->
+<div class="modal fade" id="nuevaReservaModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Nueva Reserva</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="nuevaReservaForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nombre del Cliente *</label>
+                            <input type="text" class="form-control" name="cliente_nombre" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Teléfono *</label>
+                            <input type="tel" class="form-control" name="cliente_telefono" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="cliente_email">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Fecha del Evento *</label>
+                            <input type="date" class="form-control" name="fecha_evento" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hora Inicio *</label>
+                            <input type="time" class="form-control" name="hora_inicio" value="12:00" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hora Fin *</label>
+                            <input type="time" class="form-control" name="hora_fin" value="23:59" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tipo de Celebración</label>
+                            <select class="form-select" name="tipo_celebracion">
+                                <option value="">Seleccionar...</option>
+                                <option value="boda">Boda</option>
+                                <option value="cumpleaños">Cumpleaños</option>
+                                <option value="comunion">Comunión</option>
+                                <option value="bautizo">Bautizo</option>
+                                <option value="empresa">Evento Empresa</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Número de Invitados</label>
+                            <input type="number" class="form-control" name="num_invitados" min="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Precio (€)</label>
+                            <input type="number" class="form-control" name="precio" step="0.01" min="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Anticipo (€)</label>
+                            <input type="number" class="form-control" name="anticipo" step="0.01" min="0" value="0">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Notas</label>
+                            <textarea class="form-control" name="notas" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="guardarReserva()">
+                    <i class="bi bi-save"></i> Guardar Reserva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

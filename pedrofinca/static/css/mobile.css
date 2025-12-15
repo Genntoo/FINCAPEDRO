@@ -1,0 +1,678 @@
+/* Estilos personalizados para Finca Rústica - VERSIÓN MÓVIL OPTIMIZADA */
+
+:root {
+    --primary-color: #2d6a4f;
+    --secondary-color: #52b788;
+    --accent-color: #74c69d;
+    --bg-light: #f8f9fa;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    font-size: 16px; /* Tamaño base más grande para móvil */
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==================== NAVBAR MÓVIL ==================== */
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 0.75rem 1rem;
+}
+
+.navbar-brand {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.navbar-nav .nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-nav .nav-link i {
+    font-size: 1.2rem;
+}
+
+/* ==================== CARDS MÓVILES ==================== */
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+/* Cards del Dashboard - Más grandes en móvil */
+.dashboard-card {
+    min-height: 110px;
+    margin-bottom: 1rem;
+}
+
+.dashboard-card .card-body {
+    padding: 1.25rem;
+}
+
+.dashboard-card h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+}
+
+.dashboard-card h6 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+/* ==================== BOTONES MÓVILES ==================== */
+
+.btn {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    min-height: 44px; /* Tamaño mínimo táctil iOS */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn i {
+    font-size: 1.1rem;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    min-height: 52px;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    min-height: 38px;
+}
+
+/* Botones de acción flotantes */
+.btn-floating {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-floating i {
+    font-size: 1.5rem;
+}
+
+/* ==================== TABLAS MÓVILES ==================== */
+
+.table-responsive {
+    border-radius: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.table td, .table th {
+    padding: 0.75rem;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* Ocultar columnas menos importantes en móvil */
+@media (max-width: 768px) {
+    .table .hide-mobile {
+        display: none;
+    }
+}
+
+/* ==================== CALENDARIO MÓVIL ==================== */
+
+#calendar {
+    max-width: 100%;
+    margin: 0 auto;
+    font-size: 0.85rem;
+}
+
+.fc-toolbar {
+    flex-direction: column !important;
+    gap: 0.5rem;
+}
+
+.fc-toolbar-chunk {
+    display: flex;
+    justify-content: center;
+}
+
+.fc-button {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.9rem !important;
+}
+
+.fc-daygrid-day-number {
+    font-size: 1rem;
+    padding: 0.5rem;
+}
+
+.fc-event {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 2px 4px;
+    font-size: 0.85rem;
+}
+
+/* ==================== FORMULARIOS MÓVILES ==================== */
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-control, .form-select {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    min-height: 44px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.15);
+}
+
+.input-group {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.input-group .form-control {
+    border-radius: 8px 0 0 8px;
+}
+
+.input-group .btn {
+    border-radius: 0 8px 8px 0;
+}
+
+/* ==================== MODALES MÓVILES ==================== */
+
+.modal-content {
+    border-radius: 12px;
+    border: none;
+}
+
+.modal-header {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    padding: 1.25rem;
+}
+
+.modal-body {
+    padding: 1.25rem;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    padding: 1rem 1.25rem;
+    gap: 0.5rem;
+}
+
+.modal-footer .btn {
+    flex: 1;
+}
+
+/* ==================== ALERTAS MÓVILES ==================== */
+
+.alert {
+    border-radius: 10px;
+    border: none;
+    padding: 1rem;
+    font-size: 0.95rem;
+}
+
+.alert i {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+}
+
+/* ==================== CONVERSACIONES WHATSAPP MÓVIL ==================== */
+
+#areaConversacion {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23e5ddd5" width="100" height="100"/><path d="M0 0h100v100H0z" fill="%23d9d9d9" opacity="0.05"/></svg>');
+    padding: 1rem;
+    min-height: 400px;
+}
+
+#areaConversacion .bg-success {
+    background-color: #dcf8c6 !important;
+    color: #000 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    padding: 0.75rem 1rem !important;
+    font-size: 0.95rem;
+    max-width: 85%;
+}
+
+#areaConversacion .bg-white {
+    background-color: #ffffff !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    padding: 0.75rem 1rem !important;
+    font-size: 0.95rem;
+    max-width: 85%;
+}
+
+.list-group-item {
+    padding: 1rem;
+    border-left: none;
+    border-right: none;
+    transition: background-color 0.2s;
+}
+
+.list-group-item:active {
+    background-color: rgba(45, 106, 79, 0.1);
+}
+
+.list-group-item.active {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+#areaEnvio input {
+    border-radius: 24px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+}
+
+#areaEnvio button {
+    border-radius: 24px;
+    padding: 0.75rem 1.5rem;
+}
+
+/* ==================== BADGES Y PILLS ==================== */
+
+.badge {
+    padding: 0.5rem 0.75rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    border-radius: 6px;
+}
+
+/* ==================== NAVEGACIÓN MÓVIL INFERIOR ==================== */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 1000;
+}
+
+.bottom-nav-item {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    color: #6c757d;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+}
+
+.bottom-nav-item i {
+    font-size: 1.5rem;
+}
+
+.bottom-nav-item.active {
+    color: var(--primary-color);
+}
+
+.bottom-nav-item:active {
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* ==================== SCROLL SUAVE ==================== */
+
+#areaConversacion {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ==================== ANIMACIONES MÓVILES ==================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-up {
+    animation: slideUp 0.4s ease-out;
+}
+
+/* ==================== SPINNER DE CARGA ==================== */
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15em;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* ==================== ICONOS ==================== */
+
+.bi {
+    vertical-align: -0.125em;
+}
+
+/* ==================== RESPONSIVE - MÓVIL ==================== */
+
+@media (max-width: 768px) {
+    /* Contenedor principal */
+    .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    /* Títulos más pequeños */
+    h1 {
+        font-size: 1.75rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.25rem;
+    }
+    
+    /* Navbar */
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .navbar-collapse {
+        position: fixed;
+        top: 56px;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        max-height: calc(100vh - 56px);
+        overflow-y: auto;
+    }
+    
+    /* Cards del Dashboard en columna única */
+    .dashboard-card {
+        margin-bottom: 1rem;
+    }
+    
+    /* Tablas con scroll horizontal */
+    .table-responsive {
+        margin: 0 -1rem;
+        padding: 0 1rem;
+    }
+    
+    /* Modales a pantalla completa */
+    .modal-dialog {
+        margin: 0;
+        max-width: 100%;
+        height: 100%;
+    }
+    
+    .modal-content {
+        height: 100%;
+        border-radius: 0;
+    }
+    
+    .modal-body {
+        max-height: calc(100vh - 120px);
+    }
+    
+    /* Botones más espaciados */
+    .btn-group-sm .btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    
+    /* Calendario más compacto */
+    .fc-toolbar-title {
+        font-size: 1.1rem !important;
+    }
+    
+    .fc-button {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 0.85rem !important;
+    }
+    
+    /* Área de conversación ajustada */
+    .col-md-4, .col-md-8 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    #areaConversacion {
+        min-height: 300px;
+        max-height: 60vh;
+    }
+    
+    /* Mostrar navegación inferior */
+    .bottom-nav {
+        display: flex;
+    }
+    
+    /* Agregar padding inferior para no ocultar contenido */
+    body {
+        padding-bottom: 70px;
+    }
+    
+    /* Ocultar navbar en móvil cuando hay bottom-nav */
+    .navbar-nav {
+        display: none;
+    }
+}
+
+/* ==================== RESPONSIVE - TABLET ==================== */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container-fluid {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+    
+    .card {
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* ==================== MODO OSCURO (OPCIONAL) ==================== */
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+    
+    .card {
+        background-color: #2d2d2d;
+        color: #e0e0e0;
+    }
+    
+    .navbar {
+        background-color: #2d2d2d !important;
+    }
+    
+    .modal-content {
+        background-color: #2d2d2d;
+        color: #e0e0e0;
+    }
+    
+    .form-control, .form-select {
+        background-color: #3d3d3d;
+        color: #e0e0e0;
+        border-color: #4d4d4d;
+    }
+    
+    .list-group-item {
+        background-color: #2d2d2d;
+        border-color: #3d3d3d;
+        color: #e0e0e0;
+    }
+    
+    .bottom-nav {
+        background-color: #2d2d2d;
+        border-top: 1px solid #3d3d3d;
+    }
+}
+
+/* ==================== ACCESIBILIDAD ==================== */
+
+/* Aumentar área táctil */
+a, button, .btn, .form-control, .form-select {
+    -webkit-tap-highlight-color: rgba(45, 106, 79, 0.2);
+}
+
+/* Foco visible para teclado */
+*:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Eliminar outline solo para mouse */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Texto legible */
+body {
+    line-height: 1.6;
+}
+
+/* Contraste mejorado */
+.text-muted {
+    color: #5a5a5a !important;
+}
+
+/* ==================== UTILIDADES MÓVILES ==================== */
+
+.touch-none {
+    touch-action: none;
+}
+
+.touch-pan-x {
+    touch-action: pan-x;
+}
+
+.touch-pan-y {
+    touch-action: pan-y;
+}
+
+.overscroll-none {
+    overscroll-behavior: none;
+}
+
+.select-none {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Ocultar scrollbar pero mantener funcionalidad */
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* ==================== PULL TO REFRESH (OPCIONAL) ==================== */
+
+.pull-to-refresh {
+    position: relative;
+    overflow-y: auto;
+}
+
+.pull-to-refresh-indicator {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    transition: transform 0.3s;
+}
+
+.pull-to-refresh.pulling .pull-to-refresh-indicator {
+    transform: translateX(-50%) translateY(0);
+}

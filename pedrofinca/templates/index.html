@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Finca Rústica{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="mb-0"><i class="bi bi-speedometer2"></i> Panel de Control</h1>
+            <!-- Botón añadir reserva para móvil (reemplaza el FAB) -->
+            <button class="btn btn-success d-md-none" data-bs-toggle="modal" data-bs-target="#nuevaReservaModal">
+                <i class="bi bi-plus-lg"></i> Añadir Reserva
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Reservas del Mes</h6>
+                        <h2 id="reservas-mes">0</h2>
+                    </div>
+                    <i class="bi bi-calendar-check" style="font-size: 3rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Ingresos del Mes</h6>
+                        <h2 id="ingresos-mes">0€</h2>
+                    </div>
+                    <i class="bi bi-cash-coin" style="font-size: 3rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Mensajes Enviados</h6>
+                        <h2 id="mensajes-enviados">0</h2>
+                    </div>
+                    <i class="bi bi-whatsapp" style="font-size: 3rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Próxima Reserva</h6>
+                        <h6 id="proxima-reserva">-</h6>
+                    </div>
+                    <i class="bi bi-calendar-event" style="font-size: 3rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-8 mb-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-calendar-week"></i> Próximas Reservas</h5>
+            </div>
+            <div class="card-body">
+                <!-- Vista de tabla para desktop -->
+                <div class="table-responsive d-none d-md-block">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Cliente</th>
+                                <th class="d-none d-lg-table-cell">Tipo</th>
+                                <th class="d-none d-lg-table-cell">Invitados</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="proximas-reservas-table">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Vista de cards desplegables para móvil -->
+                <div class="d-md-none" id="proximas-reservas-cards">
+                    <div class="text-center text-muted py-4">
+                        <div class="spinner-border spinner-border-sm text-success me-2" role="status"></div>
+                        Cargando reservas...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3 d-none d-lg-block">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Accesos Rápidos</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <a href="{{ url_for('calendario') }}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-calendar"></i> Ver Calendario
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-success w-100" data-bs-toggle="modal" data-bs-target="#nuevaReservaModal">
+                            <i class="bi bi-plus-circle"></i> Nueva Reserva
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{{ url_for('mensajes') }}" class="btn btn-outline-warning w-100">
+                            <i class="bi bi-whatsapp"></i> Enviar Mensaje
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 mb-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Estadísticas</h5>
+            </div>
+            <div class="card-body p-3">
+                <div style="max-width: 100%; margin: 0 auto;">
+                    <canvas id="tiposCelebracionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Reserva -->
+<div class="modal fade" id="nuevaReservaModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Nueva Reserva</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="nuevaReservaForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nombre del Cliente *</label>
+                            <input type="text" class="form-control" name="cliente_nombre" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Teléfono *</label>
+                            <input type="tel" class="form-control" name="cliente_telefono" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="cliente_email">
+                        </div>
+
+                        <!-- Selector de tipo de fechas -->
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Tipo de Reserva *</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="tipo_fecha" id="fecha_unica" value="unica" checked>
+                                <label class="btn btn-outline-success" for="fecha_unica">
+                                    <i class="bi bi-calendar-day"></i> Fecha Única
+                                </label>
+
+                                <input type="radio" class="btn-check" name="tipo_fecha" id="fecha_rango" value="rango">
+                                <label class="btn btn-outline-success" for="fecha_rango">
+                                    <i class="bi bi-calendar-range"></i> Rango de Fechas
+                                </label>
+
+                                <input type="radio" class="btn-check" name="tipo_fecha" id="fechas_multiples" value="multiples">
+                                <label class="btn btn-outline-success" for="fechas_multiples">
+                                    <i class="bi bi-calendar-check"></i> Fechas Específicas
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Fecha única (por defecto) -->
+                        <div id="contenedor-fecha-unica" class="col-md-12 mb-3">
+                            <label class="form-label">Fecha del Evento *</label>
+                            <input type="date" class="form-control" id="fecha_evento_unica" name="fecha_evento">
+                        </div>
+
+                        <!-- Rango de fechas -->
+                        <div id="contenedor-fecha-rango" class="col-md-12 mb-3" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Fecha Inicio *</label>
+                                    <input type="date" class="form-control" id="fecha_inicio_rango" name="fecha_inicio">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Fecha Fin *</label>
+                                    <input type="date" class="form-control" id="fecha_fin_rango" name="fecha_fin">
+                                </div>
+                            </div>
+                            <small class="text-muted">Se crearán reservas para todos los días del rango</small>
+                        </div>
+
+                        <!-- Fechas múltiples específicas -->
+                        <div id="contenedor-fechas-multiples" class="col-md-12 mb-3" style="display: none;">
+                            <label class="form-label">Fechas Seleccionadas *</label>
+                            <div class="input-group mb-2">
+                                <input type="date" class="form-control" id="nueva_fecha_multiple">
+                                <button type="button" class="btn btn-success" onclick="agregarFechaMultiple()">
+                                    <i class="bi bi-plus-lg"></i> Agregar
+                                </button>
+                            </div>
+                            <div id="lista-fechas-multiples" class="border rounded p-2" style="min-height: 60px; max-height: 200px; overflow-y: auto;">
+                                <small class="text-muted">Agrega las fechas específicas que deseas reservar</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hora Inicio *</label>
+                            <input type="time" class="form-control" name="hora_inicio" value="12:00" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hora Fin *</label>
+                            <input type="time" class="form-control" name="hora_fin" value="23:59" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tipo de Celebración</label>
+                            <select class="form-select" name="tipo_celebracion">
+                                <option value="">Seleccionar...</option>
+                                <option value="boda">Boda</option>
+                                <option value="cumpleaños">Cumpleaños</option>
+                                <option value="comunion">Comunión</option>
+                                <option value="bautizo">Bautizo</option>
+                                <option value="empresa">Evento Empresa</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Número de Invitados</label>
+                            <input type="number" class="form-control" name="num_invitados" min="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Precio por Día (€)</label>
+                            <input type="number" class="form-control" name="precio" step="0.01" min="0">
+                            <small class="text-muted" id="precio-total-info"></small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Anticipo (€)</label>
+                            <input type="number" class="form-control" name="anticipo" step="0.01" min="0" value="0">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

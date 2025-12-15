@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Calendario - Finca Rústica{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+            <h1 class="mb-0"><i class="bi bi-calendar"></i> Calendario de Reservas</h1>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaReservaModal">
+                <i class="bi bi-plus-circle"></i> <span class="d-none d-sm-inline">Nueva Reserva</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva/Editar Reserva -->
+<div class="modal fade" id="nuevaReservaModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-plus-circle"></i> <span id="tituloModal">Nueva Reserva</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="reservaForm">
+                    <input type="hidden" id="reserva_id" name="reserva_id">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nombre del Cliente *</label>
+                            <input type="text" class="form-control" id="cliente_nombre" name="cliente_nombre" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Teléfono *</label>
+                            <input type="tel" class="form-control" id="cliente_telefono" name="cliente_telefono" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="cliente_email" name="cliente_email">
+                        </div>
+                        
+                        <!-- Selector de tipo de fechas (solo para nueva reserva) -->
+                        <div id="selector-tipo-fecha" class="col-12 mb-3">
+                            <label class="form-label">Tipo de Reserva *</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="tipo_fecha" id="cal_fecha_unica" value="unica" checked>
+                                <label class="btn btn-outline-success" for="cal_fecha_unica">
+                                    <i class="bi bi-calendar-day"></i> <span class="d-none d-sm-inline">Fecha</span> Única
+                                </label>
+                                
+                                <input type="radio" class="btn-check" name="tipo_fecha" id="cal_fecha_rango" value="rango">
+                                <label class="btn btn-outline-success" for="cal_fecha_rango">
+                                    <i class="bi bi-calendar-range"></i> Rango<span class="d-none d-sm-inline"> de Fechas</span>
+                                </label>
+                                
+                                <input type="radio" class="btn-check" name="tipo_fecha" id="cal_fechas_multiples" value="multiples">
+                                <label class="btn btn-outline-success" for="cal_fechas_multiples">
+                                    <i class="bi bi-calendar-check"></i> <span class="d-none d-sm-inline">Fechas</span> Específicas
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Fecha única -->
+                        <div id="cal-contenedor-fecha-unica" class="col-md-12 mb-3">
+                            <label class="form-label">Fecha del Evento *</label>
+                            <input type="date" class="form-control" id="fecha_evento" name="fecha_evento">
+                        </div>
+
+                        <!-- Rango de fechas -->
+                        <div id="cal-contenedor-fecha-rango" class="col-md-12 mb-3" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Fecha Inicio *</label>
+                                    <input type="date" class="form-control" id="cal_fecha_inicio_rango">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Fecha Fin *</label>
+                                    <input type="date" class="form-control" id="cal_fecha_fin_rango">
+                                </div>
+                            </div>
+                            <small class="text-muted">Se crearán reservas para todos los días del rango</small>
+                        </div>
+
+                        <!-- Fechas múltiples específicas -->
+                        <div id="cal-contenedor-fechas-multiples" class="col-md-12 mb-3" style="display: none;">
+                            <label class="form-label">Fechas Seleccionadas *</label>
+                            <div class="input-group mb-2">
+                                <input type="date" class="form-control" id="cal_nueva_fecha_multiple">
+                                <button type="button" class="btn btn-success" onclick="calAgregarFechaMultiple()">
+                                    <i class="bi bi-plus-lg"></i> <span class="d-none d-sm-inline">Agregar</span>
+                                </button>
+                            </div>
+                            <div id="cal-lista-fechas-multiples" class="border rounded p-2" style="min-height: 60px; max-height: 200px; overflow-y: auto;">
+                                <small class="text-muted">Agrega las fechas específicas que deseas reservar</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hora Inicio *</label>
+                            <input type="time" class="form-control" id="hora_inicio" name="hora_inicio" value="12:00" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hora Fin *</label>
+                            <input type="time" class="form-control" id="hora_fin" name="hora_fin" value="23:59" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tipo de Celebración</label>
+                            <select class="form-select" id="tipo_celebracion" name="tipo_celebracion">
+                                <option value="">Seleccionar...</option>
+                                <option value="boda">Boda</option>
+                                <option value="cumpleaños">Cumpleaños</option>
+                                <option value="comunion">Comunión</option>
+                                <option value="bautizo">Bautizo</option>
+                                <option value="empresa">Evento Empresa</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Número de Invitados</label>
+                            <input type="number" class="form-control" id="num_invitados" name="num_invitados" min="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Precio por Día (€)</label>
+                            <input type="number" class="form-control" id="precio" name="precio" step="0.01" min="0">
+                            <small class="text-muted" id="cal-precio-total-info"></small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Anticipo (€)</label>
+                            <input type="number" class="form-control" id="anticipo" name="anticipo" step="0.01" min="0" value="0">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Notas</label>
+                            <textarea class="form-control" id="notas" name="notas" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="guardarReserva()">
+                    <i class="bi bi-save"></i> <span id="cal-texto-guardar">Guardar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detalle Reserva -->
+<div class="modal fade" id="detalleReservaModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title"><i class="bi bi-info-circle"></i> Detalle de Reserva</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="detalleReservaContent">
+                <!-- Contenido dinámico -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="eliminarReservaActual()">
+                    <i class="bi bi-trash"></i> Eliminar
+                </button>
+                <button type="button" class="btn btn-warning" onclick="enviarWhatsAppReservaActual()">
+                    <i class="bi bi-whatsapp"></i> Enviar WhatsApp
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/calendario.js') }}"></script>
+{% endblock %}

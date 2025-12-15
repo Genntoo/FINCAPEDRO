@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#2d6a4f">
+    <title>{% block title %}Finca Rústica - Gestión de Reservas{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+    
+    <!-- Tema Pastel Elegante -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-pastel.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    
+    <!-- Icons for mobile -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icon-192.png') }}">
+    
+    <style>
+        /* Estilos inline para carga rápida */
+        body {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        .content-wrapper {
+            padding-bottom: 80px; /* Espacio para navegación inferior */
+        }
+    </style>
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <!-- Header superior simplificado para móvil -->
+    <nav class="navbar navbar-dark bg-success sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="bi bi-tree"></i> Finca Rústica
+            </a>
+            
+            <div class="d-flex align-items-center">
+                <!-- Botón de notificaciones (futuro) -->
+                <button class="btn btn-link text-white position-relative me-2 d-none">
+                    <i class="bi bi-bell" style="font-size: 1.3rem;"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        3
+                        <span class="visually-hidden">notificaciones</span>
+                    </span>
+                </button>
+                
+                <!-- Menú de usuario -->
+                <div class="dropdown">
+                    <button class="btn btn-link text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <span class="dropdown-item-text">
+                                <strong>{{ current_user.username }}</strong>
+                            </span>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('logout') }}">
+                                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <!-- Contenido principal -->
+    <div class="content-wrapper">
+        <div class="container-fluid mt-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show slide-up" role="alert">
+                        <i class="bi bi-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    {% if current_user.is_authenticated %}
+    <!-- Navegación inferior tipo app móvil -->
+    <nav class="bottom-nav d-md-none">
+        <a href="{{ url_for('index') }}" class="bottom-nav-item {% if request.endpoint == 'index' %}active{% endif %}">
+            <i class="bi bi-house-fill"></i>
+            <span>Inicio</span>
+        </a>
+        <a href="{{ url_for('calendario') }}" class="bottom-nav-item {% if request.endpoint == 'calendario' %}active{% endif %}">
+            <i class="bi bi-calendar-fill"></i>
+            <span>Calendario</span>
+        </a>
+        <a href="{{ url_for('reservas') }}" class="bottom-nav-item {% if request.endpoint == 'reservas' %}active{% endif %}">
+            <i class="bi bi-list-check"></i>
+            <span>Reservas</span>
+        </a>
+        <a href="{{ url_for('mensajes') }}" class="bottom-nav-item {% if request.endpoint == 'mensajes' %}active{% endif %}">
+            <i class="bi bi-chat-dots-fill"></i>
+            <span>Mensajes</span>
+        </a>
+    </nav>
+    {% endif %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    
+    <!-- Script para detectar si es móvil -->
+    <script>
+        // Detectar si es dispositivo móvil
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            document.body.classList.add('is-mobile');
+        }
+        
+        // Prevenir zoom en inputs
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                e.target.style.fontSize = '16px';
+            }
+        });
+        
+        // Ocultar barra de dirección en scroll
+        let lastScrollTop = 0;
+        const navbar = document.querySelector('.navbar');
+        
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                // Scroll hacia abajo
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                // Scroll hacia arriba
+                navbar.style.transform = 'translateY(0)';
+            }
+            
+            lastScrollTop = scrollTop;
+        }, false);
+        
+        // Pull to refresh (opcional)
+        let startY = 0;
+        let isPulling = false;
+        
+        document.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].pageY;
+        });
+        
+        document.addEventListener('touchmove', function(e) {
+            const currentY = e.touches[0].pageY;
+            const pullDistance = currentY - startY;
+            
+            if (pullDistance > 50 && window.scrollY === 0) {
+                isPulling = true;
+                // Aquí podrías mostrar un indicador de "pull to refresh"
+            }
+        });
+        
+        document.addEventListener('touchend', function() {
+            if (isPulling) {
+                // Recargar página o actualizar contenido
+                // location.reload();
+                isPulling = false;
+            }
+        });
+        
+        // Agregar clase active al elemento del bottom nav actual
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navItems = document.querySelectorAll('.bottom-nav-item');
+            
+            navItems.forEach(item => {
+                if (item.getAttribute('href') === currentPath) {
+                    item.classList.add('active');
+                }
+            });
+        });
+        
+        // Haptic feedback para botones (solo iOS)
+        if ('vibrate' in navigator) {
+            document.querySelectorAll('.btn, .bottom-nav-item').forEach(element => {
+                element.addEventListener('click', () => {
+                    navigator.vibrate(10);
+                });
+            });
+        }
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+    
+    <!-- Service Worker para PWA (opcional) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/sw.js')
+                .then(reg => console.log('Service Worker registrado', reg))
+                .catch(err => console.log('Error en Service Worker', err));
+        }
+    </script>
+</body>
+</html>
