@@ -4,6 +4,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+import json
 from twilio.rest import Client
 
 app = Flask(__name__)
@@ -93,6 +94,9 @@ class Mensaje(db.Model):
     direccion = db.Column(db.String(20), default='saliente')  # 'saliente' o 'entrante'
     estado = db.Column(db.String(20), default='enviado')
     twilio_sid = db.Column(db.String(100))
+    num_media = db.Column(db.Integer, default=0)  # Número de archivos multimedia
+    media_urls = db.Column(db.Text)  # URLs de archivos multimedia (JSON)
+    media_types = db.Column(db.Text)  # Tipos de archivos multimedia (JSON)
     enviado_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -313,6 +317,7 @@ def enviar_whatsapp():
             direccion='saliente',
             estado='enviado',
             twilio_sid=message.sid,
+            num_media=0,
             user_id=current_user.id
         )
         
@@ -330,6 +335,7 @@ def enviar_whatsapp():
             tipo='whatsapp',
             direccion='saliente',
             estado='fallido',
+            num_media=0,
             user_id=current_user.id
         )
         db.session.add(nuevo_mensaje)
@@ -379,12 +385,20 @@ def obtener_conversaciones_agrupadas():
             # Contar mensajes no leídos (entrantes sin leer - feature futura)
             no_leidos = 0
             
+            # Preparar texto del último mensaje
+            ultimo_texto = ultimo_mensaje.contenido[:50]
+            if ultimo_mensaje.num_media and ultimo_mensaje.num_media > 0:
+                ultimo_texto = f"📎 {ultimo_mensaje.num_media} archivo(s) - {ultimo_texto}"
+            if len(ultimo_mensaje.contenido) > 50:
+                ultimo_texto += '...'
+            
             conversaciones.append({
                 'telefono': telefono,
                 'nombre': nombre,
-                'ultimo_mensaje': ultimo_mensaje.contenido[:50] + ('...' if len(ultimo_mensaje.contenido) > 50 else ''),
+                'ultimo_mensaje': ultimo_texto,
                 'ultimo_mensaje_fecha': ultimo_mensaje.enviado_at.strftime('%d/%m %H:%M'),
-                'no_leidos': no_leidos
+                'no_leidos': no_leidos,
+                'tiene_multimedia': ultimo_mensaje.num_media > 0 if ultimo_mensaje.num_media else False
             })
         
         # Ordenar por fecha más reciente
@@ -393,18 +407,36 @@ def obtener_conversaciones_agrupadas():
         return jsonify(conversaciones)
         
     except Exception as e:
+        print(f"Error al obtener conversaciones: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 
 @app.route('/api/whatsapp/webhook', methods=['POST'])
 def whatsapp_webhook():
-    """Webhook para recibir mensajes entrantes de Twilio"""
+    """Webhook para recibir mensajes entrantes de Twilio (incluyendo multimedia)"""
     try:
         # Obtener datos del mensaje entrante
         from_number = request.form.get('From')
         to_number = request.form.get('To')
-        body = request.form.get('Body')
+        body = request.form.get('Body', '')  # El body puede estar vacío si solo hay media
         message_sid = request.form.get('MessageSid')
+        
+        # Obtener información de archivos multimedia
+        num_media = int(request.form.get('NumMedia', 0))
+        media_urls = []
+        media_types = []
+        
+        # Recopilar URLs y tipos de todos los archivos multimedia
+        for i in range(num_media):
+            media_url = request.form.get(f'MediaUrl{i}')
+            media_type = request.form.get(f'MediaContentType{i}')
+            if media_url:
+                media_urls.append(media_url)
+                media_types.append(media_type or 'unknown')
+        
+        # Si no hay texto pero hay multimedia, indicarlo
+        if not body and num_media > 0:
+            body = f"[{num_media} archivo(s) multimedia]"
         
         # Buscar si existe una reserva con este número
         telefono_limpio = from_number.replace('whatsapp:', '').replace('+', '')
@@ -412,7 +444,7 @@ def whatsapp_webhook():
             Reserva.cliente_telefono.contains(telefono_limpio[-9:])
         ).first()
         
-        # Guardar mensaje entrante
+        # Guardar mensaje entrante con información multimedia
         nuevo_mensaje = Mensaje(
             reserva_id=reserva.id if reserva else None,
             telefono_destino=to_number,
@@ -422,23 +454,34 @@ def whatsapp_webhook():
             direccion='entrante',
             estado='recibido',
             twilio_sid=message_sid,
+            num_media=num_media,
+            media_urls=json.dumps(media_urls) if media_urls else None,
+            media_types=json.dumps(media_types) if media_types else None,
             user_id=None
         )
         
         db.session.add(nuevo_mensaje)
         db.session.commit()
         
+        print(f"✅ Mensaje recibido de {from_number}")
+        print(f"   Contenido: {body}")
+        print(f"   Archivos multimedia: {num_media}")
+        if media_urls:
+            print(f"   URLs: {media_urls}")
+        
         return '', 200
         
     except Exception as e:
-        print(f"Error en webhook: {str(e)}")
-        return '', 200
+        print(f"❌ Error en webhook: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return '', 200  # Siempre devolver 200 para que Twilio no reintente
 
 
 @app.route('/api/conversacion/<telefono>')
 @login_required
 def obtener_conversacion(telefono):
-    """Obtener todos los mensajes de una conversación con un número"""
+    """Obtener todos los mensajes de una conversación con un número (incluyendo multimedia)"""
     try:
         # Normalizar el teléfono
         telefono_normalizado = telefono.replace('whatsapp:', '').replace('+', '').replace(' ', '')
@@ -451,17 +494,28 @@ def obtener_conversacion(telefono):
             )
         ).order_by(Mensaje.enviado_at.asc()).all()
         
-        return jsonify([{
-            'id': m.id,
-            'contenido': m.contenido,
-            'direccion': m.direccion,
-            'estado': m.estado,
-            'fecha': m.enviado_at.strftime('%d/%m/%Y %H:%M'),
-            'telefono_origen': m.telefono_origen,
-            'telefono_destino': m.telefono_destino
-        } for m in mensajes])
+        resultado = []
+        for m in mensajes:
+            mensaje_data = {
+                'id': m.id,
+                'contenido': m.contenido,
+                'direccion': m.direccion,
+                'estado': m.estado,
+                'fecha': m.enviado_at.strftime('%d/%m/%Y %H:%M'),
+                'telefono_origen': m.telefono_origen,
+                'telefono_destino': m.telefono_destino,
+                'num_media': m.num_media or 0,
+                'media_urls': json.loads(m.media_urls) if m.media_urls else [],
+                'media_types': json.loads(m.media_types) if m.media_types else []
+            }
+            resultado.append(mensaje_data)
+        
+        return jsonify(resultado)
         
     except Exception as e:
+        print(f"❌ Error al obtener conversación: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 
