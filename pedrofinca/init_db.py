@@ -24,7 +24,7 @@ def init_app():
                 email='admin@finca.com',
                 is_admin=True
             )
-            admin.set_password('admin123')
+            admin.set_password('LiBgppi6!')
             db.session.add(admin)
             db.session.commit()
             
